@@ -6,7 +6,7 @@ from . import OP_Base
 
 class Macro_TweakLinkedByWeight(bpy.types.Macro):
     bl_idname = "mesh.tweak_linked_by_weight"
-    bl_label = "Tweak linked by weight zZz"
+    bl_label = "Tweak Linked By Weight Boundary"
     bl_options = {'REGISTER', 'UNDO'}
 
 class OP_SelectLinkedByWeightBoundary(bpy.types.Operator, OP_Base.OP_MeshBase):
@@ -50,17 +50,7 @@ class OP_SelectLinkedByWeightBoundary(bpy.types.Operator, OP_Base.OP_MeshBase):
                 continue
 
             bm = bmesh.from_edit_mesh(obj.data)    
-            bm.verts.ensure_lookup_table()       
-            bm.edges.ensure_lookup_table()
-
-            bevel_layer = None
-            if use_bevel_weight:
-                bevel_layer = bm.edges.layers.bevel_weight.verify()
-
-            crease_layer = None
-            if use_crease_weight:
-                crease_layer = bm.edges.layers.crease.verify()
-
+        
             selected_faces = [face for face in bm.faces if face.select]
             if len(selected_faces) == 0 or len(selected_faces) == len(bm.faces):
                 continue
@@ -78,20 +68,8 @@ class OP_SelectLinkedByWeightBoundary(bpy.types.Operator, OP_Base.OP_MeshBase):
                 edge.select = edge in boundary_edges                    
                 
         bpy.context.tool_settings.mesh_select_mode = False, True, False
-        
-
-            
-        # print("Run Modal...")
-        # context.window_manager.modal_handler_add(self)
-        # return {'RUNNING_MODAL'}
+    
         return {'FINISHED'}
-
-    def set_edge_values(self, bm, edges, bevel_layer, crease_layer):
-        for edge in edges:
-            if "Bevel" == self.weight_type:
-                edge[bevel_layer] = self.weight
-            if "Crease" == self.weight_type:
-                edge[crease_layer] = self.weight
 
 
     def draw(self, context):

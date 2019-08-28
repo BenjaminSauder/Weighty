@@ -50,6 +50,7 @@ def face_mesh_menu(self, context):
     layout.separator()
     layout.operator_context = "INVOKE_DEFAULT"
     layout.operator(OP_BoundaryLoopWeight.OP_BoundaryLoopWeight.bl_idname)
+    layout.operator(OP_TweakLinkedByWeight.Macro_TweakLinkedByWeight.bl_idname)
 
 
 def register():
